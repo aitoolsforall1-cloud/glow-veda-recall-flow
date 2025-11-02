@@ -1,10 +1,16 @@
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { mockNotifications, mockRecalls } from "@/data/mockData";
 import { Send, Mail, MessageSquare, Bell, TrendingUp, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const Notify = () => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const recallId = searchParams.get("recallId");
+  
   const totalSent = mockNotifications.reduce((acc, n) => acc + n.sent, 0);
   const totalDelivered = mockNotifications.reduce((acc, n) => acc + n.delivered, 0);
   const totalFailed = mockNotifications.reduce((acc, n) => acc + n.failed, 0);
@@ -95,7 +101,12 @@ const Notify = () => {
                 Select recall, segment recipients, and send multi-channel alerts
               </p>
             </div>
-            <Button className="w-full md:w-auto">
+            <Button 
+              className="w-full md:w-auto"
+              onClick={() => toast.success("Notification wizard opened", {
+                description: "Configure recipients and send notifications"
+              })}
+            >
               <Send className="h-4 w-4 mr-2" />
               Start Wizard
             </Button>
@@ -178,10 +189,22 @@ const Notify = () => {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => navigate(`/comply?recallId=${notification.recallId}`)}
+                    >
                       View Report
                     </Button>
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => toast.success("Resending failed notifications", {
+                        description: "Failed notifications will be resent within 5 minutes"
+                      })}
+                    >
                       Resend Failed
                     </Button>
                   </div>

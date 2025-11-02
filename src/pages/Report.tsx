@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import StatusBadge from "@/components/StatusBadge";
 import { mockSupportTickets, mockRecalls } from "@/data/mockData";
+import { toast } from "sonner";
 import {
   MessageSquare,
   Search,
@@ -17,12 +19,15 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 const Report = () => {
+  const navigate = useNavigate();
   const [selectedTicket, setSelectedTicket] = useState(mockSupportTickets[0]);
   const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      // In a real app, this would send the message
+      toast.success("Message sent to customer", {
+        description: "Your response has been delivered"
+      });
       setMessage("");
     }
   };
@@ -215,10 +220,21 @@ const Report = () => {
                   </div>
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setMessage("Hi, I understand your concern. Your refund is currently being processed and should be completed within 3-5 business days. I'll escalate this to ensure faster processing.");
+                          toast.info("AI suggestion applied");
+                        }}
+                      >
                         Use AI Suggestion
                       </Button>
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => toast.info("Template library opened")}
+                      >
                         Add Template
                       </Button>
                     </div>

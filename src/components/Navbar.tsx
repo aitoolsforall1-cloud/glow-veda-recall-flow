@@ -6,9 +6,26 @@ interface NavbarProps {
   role?: string;
 }
 
+const roleModules = {
+  "QA Lead": [
+    { name: "Detect", path: "/detect" },
+    { name: "Notify", path: "/notify" },
+    { name: "Comply", path: "/comply" },
+  ],
+  "Compliance Officer": [
+    { name: "Comply", path: "/comply" },
+    { name: "Detect", path: "/detect" },
+  ],
+  "Support Specialist": [
+    { name: "Support", path: "/report" },
+    { name: "Acknowledge", path: "/acknowledge" },
+  ],
+};
+
 const Navbar = ({ role }: NavbarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const modules = roleModules[role as keyof typeof roleModules] || [];
 
   const getRoleIcon = (roleName?: string) => {
     const icons: Record<string, string> = {
@@ -60,6 +77,26 @@ const Navbar = ({ role }: NavbarProps) => {
             </div>
           )}
         </div>
+        
+        {/* Module Navigation Tabs */}
+        {modules.length > 0 && !isHomePage && (
+          <div className="flex gap-1 pb-2 overflow-x-auto border-t border-border/50 pt-2">
+            {modules.map((module) => {
+              const isActive = location.pathname === module.path;
+              return (
+                <Button
+                  key={module.path}
+                  variant={isActive ? "default" : "ghost"}
+                  size="sm"
+                  className="whitespace-nowrap"
+                  onClick={() => navigate(module.path)}
+                >
+                  {module.name}
+                </Button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </nav>
   );

@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/StatusBadge";
 import { mockRecalls } from "@/data/mockData";
+import { toast } from "sonner";
 import {
   Plus,
   Search,
@@ -24,6 +26,7 @@ import {
 } from "@/components/ui/select";
 
 const Detect = () => {
+  const navigate = useNavigate();
   const [recalls] = useState(mockRecalls);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -120,7 +123,13 @@ const Detect = () => {
                 <SelectItem value="Closed">Closed</SelectItem>
               </SelectContent>
             </Select>
-            <Button className="w-full md:w-auto">
+            <Button 
+              className="w-full md:w-auto"
+              onClick={() => {
+                toast.success("Recall created successfully");
+                navigate("/notify");
+              }}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Create Recall
             </Button>
@@ -173,10 +182,17 @@ const Detect = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => navigate(`/comply?recallId=${recall.id}`)}
+                  >
                     View Details
                   </Button>
-                  <Button size="sm">
+                  <Button 
+                    size="sm"
+                    onClick={() => navigate(`/notify?recallId=${recall.id}`)}
+                  >
                     Manage
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>

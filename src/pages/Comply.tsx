@@ -1,8 +1,10 @@
+import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import StatusBadge from "@/components/StatusBadge";
 import { mockCompliance, mockRecalls, mockAnalytics } from "@/data/mockData";
+import { toast } from "sonner";
 import {
   FileText,
   Download,
@@ -13,6 +15,9 @@ import {
 } from "lucide-react";
 
 const Comply = () => {
+  const [searchParams] = useSearchParams();
+  const recallId = searchParams.get("recallId");
+  
   const stats = [
     {
       label: "Active Recalls",
@@ -55,7 +60,11 @@ const Comply = () => {
                 Monitor delivery metrics, acknowledgment rates, and SLA compliance
               </p>
             </div>
-            <Button>
+            <Button
+              onClick={() => toast.success("Generating compliance report", {
+                description: "Your report will download shortly"
+              })}
+            >
               <Download className="h-4 w-4 mr-2" />
               Generate Report
             </Button>
@@ -179,7 +188,13 @@ const Comply = () => {
                         <StatusBadge status={compliance.SLACompliance} size="sm" />
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => toast.info("Detailed compliance report", {
+                            description: `Viewing full details for ${compliance.recallId}`
+                          })}
+                        >
                           View Report
                         </Button>
                       </td>
@@ -193,15 +208,33 @@ const Comply = () => {
 
         {/* Export Options */}
         <div className="mt-6 flex flex-col sm:flex-row gap-3 animate-fade-in">
-          <Button variant="outline" className="flex-1">
+          <Button 
+            variant="outline" 
+            className="flex-1"
+            onClick={() => toast.success("Exporting as PDF", {
+              description: "Your PDF report is being generated"
+            })}
+          >
             <FileText className="h-4 w-4 mr-2" />
             Export as PDF
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button 
+            variant="outline" 
+            className="flex-1"
+            onClick={() => toast.success("Exporting as CSV", {
+              description: "Your CSV file will download shortly"
+            })}
+          >
             <Download className="h-4 w-4 mr-2" />
             Export as CSV
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button 
+            variant="outline" 
+            className="flex-1"
+            onClick={() => toast.success("Audit log verified", {
+              description: "All records are cryptographically secured"
+            })}
+          >
             <Shield className="h-4 w-4 mr-2" />
             Verify Audit Log
           </Button>

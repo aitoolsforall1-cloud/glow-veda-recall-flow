@@ -22,7 +22,7 @@ GlowVeda enables:
 
 ## 🧩 What’s Included in This Repo
 - Feature descriptions  
-- Wireframes / flows (if added)  
+- Wireframes
 - Storyboards  
 - System & recall workflow diagrams  
 
